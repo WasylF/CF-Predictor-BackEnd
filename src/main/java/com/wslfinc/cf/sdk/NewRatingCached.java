@@ -35,7 +35,7 @@ public class NewRatingCached {
     cache = CacheBuilder.newBuilder()
       .refreshAfterWrite(timeToRefreshSeconds, TimeUnit.SECONDS)
       .build(
-        new CacheLoader<Integer, List<ContestantResult>>() {
+        new CacheLoader<>() {
           @Override
           public ListenableFuture<List<ContestantResult>> reload(Integer contestId, List<ContestantResult> oldValue) {
             ListenableFutureTask<List<ContestantResult>> task = ListenableFutureTask.create(() -> {
