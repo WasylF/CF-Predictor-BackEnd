@@ -1,0 +1,1 @@
+java -jar target/CF-PredictorBackEnd-2.0-SNAPSHOT.jar
