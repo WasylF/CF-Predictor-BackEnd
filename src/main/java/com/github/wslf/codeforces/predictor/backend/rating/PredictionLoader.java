@@ -1,4 +1,4 @@
-package com.github.wslf.codeforces.rating;
+package com.github.wslf.codeforces.predictor.backend.rating;
 
 import com.github.wslf.codeforces.rating.calculator.entities.ContestantResult;
 import com.google.common.cache.CacheLoader;
