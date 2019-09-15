@@ -35,3 +35,5 @@ target/*
 contests/*
 nextRating/*
 
+# Classified configuration
+src/main/resources/storage.github.properties

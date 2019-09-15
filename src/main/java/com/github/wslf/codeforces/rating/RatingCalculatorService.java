@@ -1,6 +1,6 @@
 package com.github.wslf.codeforces.rating;
 
-import com.github.wslf.codeforces.rating.entities.ContestantResult;
+import com.github.wslf.codeforces.rating.calculator.entities.ContestantResult;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
