@@ -1,7 +1,7 @@
-package com.github.wslf.codeforces.storage.github;
+package com.github.wslf.codeforces.predictor.backend.storage.github;
 
-import com.github.wslf.codeforces.storage.StorageException;
-import com.github.wslf.codeforces.storage.StorageStrategy;
+import com.github.wslf.codeforces.predictor.backend.storage.StorageException;
+import com.github.wslf.codeforces.predictor.backend.storage.StorageStrategy;
 import com.github.wslf.github.Credentials;
 import com.github.wslf.github.fileapi.FileAPI;
 import com.google.gson.Gson;

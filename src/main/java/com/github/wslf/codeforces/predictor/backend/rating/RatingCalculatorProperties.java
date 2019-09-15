@@ -1,4 +1,4 @@
-package com.github.wslf.codeforces.rating;
+package com.github.wslf.codeforces.predictor.backend.rating;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

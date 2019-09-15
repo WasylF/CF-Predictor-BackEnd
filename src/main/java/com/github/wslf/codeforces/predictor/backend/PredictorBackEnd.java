@@ -1,7 +1,7 @@
-package com.github.wslf.codeforces;
+package com.github.wslf.codeforces.predictor.backend;
 
-import com.github.wslf.codeforces.rating.RatingCalculatorProperties;
-import com.github.wslf.codeforces.storage.github.GitHubProperties;
+import com.github.wslf.codeforces.predictor.backend.rating.RatingCalculatorProperties;
+import com.github.wslf.codeforces.predictor.backend.storage.github.GitHubProperties;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

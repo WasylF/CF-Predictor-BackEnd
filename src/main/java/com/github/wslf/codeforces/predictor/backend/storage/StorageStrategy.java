@@ -1,4 +1,4 @@
-package com.github.wslf.codeforces.storage;
+package com.github.wslf.codeforces.predictor.backend.storage;
 
 /**
  * Strategy to write and read data.

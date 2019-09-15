@@ -1,4 +1,4 @@
-package com.github.wslf.codeforces.controllers;
+package com.github.wslf.codeforces.predictor.backend.controllers;
 
 import lombok.Data;
 import org.springframework.web.bind.annotation.RequestMapping;
