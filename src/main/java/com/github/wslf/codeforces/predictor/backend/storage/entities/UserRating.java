@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserRating {
-  String handle;
-  int rating;
+  private String handle;
+  private int rating;
 }
