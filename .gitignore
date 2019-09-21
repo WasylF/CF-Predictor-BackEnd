@@ -37,3 +37,4 @@ nextRating/*
 
 # Classified configuration
 src/main/resources/storage.github.properties
+src/main/resources/storage.github.current.rating.properties
