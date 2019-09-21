@@ -1,4 +1,4 @@
-package com.github.wslf.codeforces.predictor.backend.storage.github;
+package com.github.wslf.codeforces.predictor.backend.storage.github.properties;
 
 import lombok.Data;
 

@@ -2,16 +2,15 @@ package com.github.wslf.codeforces.predictor.backend.storage.github;
 
 import com.github.wslf.codeforces.predictor.backend.storage.StorageException;
 import com.github.wslf.codeforces.predictor.backend.storage.StorageStrategy;
+import com.github.wslf.codeforces.predictor.backend.storage.github.properties.GitHubProperties;
 import com.github.wslf.github.Credentials;
 import com.github.wslf.github.fileapi.FileAPI;
 import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.io.IOException;
 
 @Log4j2
-@EnableConfigurationProperties(GitHubProperties.class)
 public class GitHubStorageStrategy<T> implements StorageStrategy<T, Identifier, OptionalParameters> {
 
   private final Credentials credentials;

@@ -1,8 +1,8 @@
 package com.github.wslf.codeforces.predictor.backend;
 
 import com.github.wslf.codeforces.predictor.backend.rating.RatingCalculatorProperties;
-import com.github.wslf.codeforces.predictor.backend.storage.github.CurrentRatingProperties;
-import com.github.wslf.codeforces.predictor.backend.storage.github.GitHubProperties;
+import com.github.wslf.codeforces.predictor.backend.storage.github.properties.CurrentRatingProperties;
+import com.github.wslf.codeforces.predictor.backend.storage.github.properties.GitHubProperties;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
