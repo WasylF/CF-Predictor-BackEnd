@@ -28,8 +28,9 @@ public class GitHubStorageStrategy<T> implements StorageStrategy<T, Identifier, 
   @Override
   public void save(T data, Identifier identifier, OptionalParameters parameters) throws StorageException {
     String json = gson.toJson(data);
-    String commitMessage = (parameters == null || parameters.getCommitMessage() ==
-                                                  null) ? defaultSaveParameters.getCommitMessage() : parameters.getCommitMessage();
+    String commitMessage = (parameters == null || parameters.getCommitMessage() == null)
+        ? defaultSaveParameters.getCommitMessage()
+        : parameters.getCommitMessage();
 
     try {
       githubAPI.createOrUpdateFile(credentials, identifier.repository, identifier.path, json, commitMessage,
