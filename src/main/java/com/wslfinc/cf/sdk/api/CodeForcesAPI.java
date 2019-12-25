@@ -4,8 +4,10 @@ import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.RanklistRow;
 import com.wslfinc.cf.sdk.entities.RatingChange;
 import com.wslfinc.cf.sdk.entities.User;
+import com.wslfinc.cf.sdk.entities.additional.Contestant;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,13 +29,11 @@ public class CodeForcesAPI {
 
   private void beforeAPICall() {
     totalAPICalls++;
-    System.out.println("Doing API request #" + totalAPICalls
-      + ": " + LocalDateTime.now());
+    System.out.println("Doing API request #" + totalAPICalls + ": " + LocalDateTime.now());
   }
 
   private void afterAPICall() {
-    System.out.println("API request #" + totalAPICalls + " done "
-      + ": " + LocalDateTime.now());
+    System.out.println("API request #" + totalAPICalls + " done " + ": " + LocalDateTime.now());
   }
 
   public long getTotalAPICalls() {
@@ -63,19 +63,18 @@ public class CodeForcesAPI {
   }
 
   /**
-   * @param contestId      Id of the contest. It is not the round number. It can be
-   *                       seen in contest URL.
+   * @param contestId      Id of the contest. It is not the round number. It can be seen in contest URL.
    * @param from           1-based index of the standings row to start the ranklist.
    * @param count          Number of standing rows to return.
-   * @param showUnofficial if true than all participants (virtual, out of
-   *                       competition) are shown. Otherwise, only official contestants are shown.
+   * @param showUnofficial if true than all participants (virtual, out of competition) are shown. Otherwise, only
+   *                       official contestants are shown.
    * @param contest        returning result
    * @param problems       returning result
    * @param rows           returning result
    * @return successfulness
    */
-  public boolean getContestStanding(int contestId, int from, int count, boolean showUnofficial,
-                                    Contest contest, Object problems, List<RanklistRow> rows) {
+  public boolean getContestStanding(int contestId, int from, int count, boolean showUnofficial, Contest contest,
+                                    Object problems, List<RanklistRow> rows) {
     beforeAPICall();
     boolean result = ContestAPI.getContestStanding(contestId, from, count, showUnofficial, contest, problems, rows);
     afterAPICall();
@@ -117,6 +116,13 @@ public class CodeForcesAPI {
   public List<RatingChange> getRatingHistory(String handle) {
     beforeAPICall();
     List<RatingChange> result = UserAPI.getRatingHistory(handle);
+    afterAPICall();
+    return result;
+  }
+
+  public ArrayList<Contestant> getRatedList(boolean activeOnly) throws Exception {
+    beforeAPICall();
+    var result = UserAPI.getRatedList(activeOnly);
     afterAPICall();
     return result;
   }

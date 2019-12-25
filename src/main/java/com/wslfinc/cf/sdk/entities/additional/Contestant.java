@@ -14,8 +14,7 @@ public class Contestant implements Comparable<Contestant> {
    */
   String handle;
   /**
-   * User's current rank on contest. {@code DEFAULT_RANK} = -1 = unknown =
-   * doesn't participate
+   * User's current rank on contest. {@code DEFAULT_RANK} = -1 = unknown = doesn't participate
    */
   int rank;
   /**

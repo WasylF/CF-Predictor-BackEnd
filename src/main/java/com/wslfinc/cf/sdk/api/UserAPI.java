@@ -3,6 +3,7 @@ package com.wslfinc.cf.sdk.api;
 import com.wslfinc.cf.sdk.ResponseChecker;
 import com.wslfinc.cf.sdk.entities.RatingChange;
 import com.wslfinc.cf.sdk.entities.User;
+import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.helpers.web.JsonReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,8 +57,7 @@ class UserAPI {
         return usersList;
       }
     } catch (Exception ex) {
-      System.err.println("Couldn't get users info. "
-        + "url: " + url + "\n" + ex.getMessage());
+      System.err.println("Couldn't get users info. " + "url: " + url + "\n" + ex.getMessage());
     }
 
     return new ArrayList<>();
@@ -84,10 +84,36 @@ class UserAPI {
         return ratingHistory;
       }
     } catch (Exception ex) {
-      System.err.println("Couldn't get user rating history. "
-        + "url: " + url + "\n" + ex.getMessage());
+      System.err.println("Couldn't get user rating history. " + "url: " + url + "\n" + ex.getMessage());
     }
 
     return new ArrayList<>();
   }
+
+  /**
+   * Returns the list users who have participated in at least one rated contest.
+   * <p>
+   * activeOnly . If true then only users, who participated in rated contest during the last month are returned.
+   * Otherwise, all users with at least one rated contest are returned.
+   *
+   * @return
+   */
+  public static ArrayList<Contestant> getRatedList(boolean activeOnly) throws Exception {
+    String url = API_PREFIX + "/user.ratedList?activeOnly=" + activeOnly;
+    JSONObject response = JsonReader.read(url);
+    if (response != null || ResponseChecker.isValid(response)) {
+      JSONArray array = response.getJSONArray(JSON_RESULTS);
+
+      ArrayList<Contestant> contestants = new ArrayList<>();
+      for (Object item : array) {
+        User user = new User((JSONObject) item);
+        contestants.add(new Contestant(user.getHandle(), user.getRating()));
+      }
+
+      return contestants;
+    }
+
+    throw new Exception("Failed to get RatedList:" + response.toString());
+  }
+
 }
