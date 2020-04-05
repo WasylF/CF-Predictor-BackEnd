@@ -47,27 +47,27 @@ public class ContestantProcessing {
    */
   @Deprecated
   static List<Contestant> getActiveContestants(int contestId) {
-    List<Contestant> registredContestants = getAllContestants(contestId);
+    List<Contestant> registeredContestants = getAllContestants(contestId);
     List<RanklistRow> rows = getRanklistRows(contestId);
 
     Map<String, Integer> prevRating = new HashMap<>();
-    for (Contestant contestant : registredContestants) {
+    for (Contestant contestant : registeredContestants) {
       prevRating.put(contestant.getHandle(), contestant.getPrevRating());
     }
 
-    return getActiveContestants(registredContestants, prevRating, rows);
+    return getActiveContestants(registeredContestants, prevRating, rows);
   }
 
   static ArrayList<Team> getActiveTeams(int contestId) {
-    List<Contestant> registredContestants = getAllContestants(contestId);
+    List<Contestant> registeredContestants = getAllContestants(contestId);
     List<RanklistRow> rows = getRanklistRows(contestId);
 
     Map<String, Integer> prevRating = new HashMap<>();
-    for (Contestant contestant : registredContestants) {
+    for (Contestant contestant : registeredContestants) {
       prevRating.put(contestant.getHandle(), contestant.getPrevRating());
     }
 
-    return getActiveTeams(contestId, registredContestants, prevRating, rows);
+    return getActiveTeams(contestId, registeredContestants, prevRating, rows);
   }
 
   @Deprecated
