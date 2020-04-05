@@ -98,7 +98,6 @@ class ContestAPI {
         problems = result.getJSONArray("problems");
         JSONArray array = result.getJSONArray("rows");
 
-        rows.clear();
         for (Object item : array) {
           rows.add(new RanklistRow((JSONObject) item));
         }

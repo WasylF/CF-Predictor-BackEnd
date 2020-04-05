@@ -2,8 +2,10 @@ package com.wslfinc.cf;
 
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.Contest;
+import com.wslfinc.cf.sdk.entities.ContestType;
 import com.wslfinc.cf.sdk.entities.RatingChange;
 import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
+import com.wslfinc.cf.sdk.rating.RatingCalculatorTeam;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +16,11 @@ import java.util.List;
  */
 public class EvaluateMyRatingCalculation {
 
+  static ArrayList<ContestantResult> GetPredicted(int contestId) {
+    RatingCalculatorTeam ratingCalculator = RatingCalculatorTeam.getRatingCalculator(contestId);
+    return new ArrayList<>(ratingCalculator.getNewRatings());
+  }
+
   // 592
   public static void calculateRatingDiff(int minContestId, int maxContestId) {
     List<RatingDiff> difference = new ArrayList<>();
@@ -21,31 +28,34 @@ public class EvaluateMyRatingCalculation {
 
     for (int contestId = minContestId; contestId <= maxContestId; contestId++) {
       Contest contest = CodeForcesSDK.getContest(contestId);
-      /*if (contest.getType() == ContestType.CF) */
-      {
-        List<ContestantResult> predictedRating
-          = CodeForcesSDK.getNewRatings(contestId);
-        List<RatingChange> realRating
-          = CodeForcesSDK.getRatingChanges(contestId);
+      if (contest.getType() == ContestType.CF) {
+        List<ContestantResult> predictedRating = GetPredicted(contestId);
+//          = CodeForcesSDK.getNewRatings(contestId);
+        List<RatingChange> realRating = CodeForcesSDK.getRatingChanges(contestId);
 
         totalPredictions += realRating.size();
-        for (ContestantResult rPredict : predictedRating) {
-          for (RatingChange rReal : realRating) {
-            if (rPredict.getHandle().equals(rReal.getHandle())) {
-              if (rPredict.getNextRating() != rReal.getNewRating()) {
-                RatingDiff rd
-                  = new RatingDiff(contestId,
-                  rPredict.getHandle(),
-                  rPredict.getNextRating(),
-                  rReal.getNewRating(),
-                  rReal.getOldRating(),
-                  rReal.getRank(),
-                  rPredict.getSeed());
+        for (RatingChange real_rating_change : realRating) {
+          boolean found = false;
+          for (ContestantResult predicted_rating_change : predictedRating) {
+            if (predicted_rating_change.getHandle().equals(real_rating_change.getHandle())) {
+              found = true;
+              if (predicted_rating_change.getNextRating() != real_rating_change.getNewRating()) {
+                RatingDiff rd = new RatingDiff(contestId, predicted_rating_change.getHandle(),
+                    predicted_rating_change.getNextRating(), real_rating_change.getNewRating(),
+                    real_rating_change.getOldRating(), real_rating_change.getRank(), predicted_rating_change.getSeed());
 
                 difference.add(rd);
               }
               break;
             }
+          }
+
+          if (!found) {
+            RatingDiff rd =
+                new RatingDiff(contestId, real_rating_change.getHandle(), 0, real_rating_change.getNewRating(),
+                    real_rating_change.getOldRating(), real_rating_change.getRank(), 0);
+
+            difference.add(rd);
           }
         }
       }
@@ -64,8 +74,7 @@ public class EvaluateMyRatingCalculation {
     System.out.println("Total predictions: " + totalPredictions);
     double p = difference.size() * 100;
     p /= totalPredictions;
-    System.out.println("Wrong of them: " + difference.size()
-      + "  ( " + p + " %)");
+    System.out.println("Wrong of them: " + difference.size() + "  ( " + p + " %)");
 
     int totalDiff = 0;
     int maxDiff = 0;
@@ -79,7 +88,9 @@ public class EvaluateMyRatingCalculation {
     System.out.println("Total sum of differences: " + totalDiff);
     System.out.println("Maximal difference: " + maxDiff);
     p = totalDiff;
-    p /= difference.size();
+    if (!difference.isEmpty()) {
+      p /= difference.size();
+    }
     System.out.println("Average mistake: " + p);
 
     Collections.sort(difference);
@@ -89,10 +100,9 @@ public class EvaluateMyRatingCalculation {
     System.out.println("difference real previous predicted rank seed contestId handle");
     for (int i = 0; i < difference.size(); i++) {
       RatingDiff diff = difference.get(i);
-      System.out.println(diff.diff + " " + diff.realRating + " "
-        + diff.prevRating + " " + diff.predictedRating + " "
-        + diff.rank + " " + diff.seed + " "
-        + diff.contestId + " " + diff.handle);
+      System.out.println(
+          diff.diff + " " + diff.realRating + " " + diff.prevRating + " " + diff.predictedRating + " " + diff.rank +
+          " " + diff.seed + " " + diff.contestId + " " + diff.handle);
     }
 
     System.out.println("\n");
