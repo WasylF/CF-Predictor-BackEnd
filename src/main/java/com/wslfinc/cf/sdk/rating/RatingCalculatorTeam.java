@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class RatingCalculatorTeam {
 
-  private int minDelta = 300;
-  private int maxDelta = 700;
+  private int minDelta = 400;
+  private int maxDelta = 1100;
 
   public void setMinDelta(int minDelta) {
     this.minDelta = minDelta;
