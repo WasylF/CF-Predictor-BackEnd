@@ -40,7 +40,7 @@ public class Constants {
 
   public static final String PAST_RATING_URL_SUFFIX = ".html";
 
-  public static final int INITIAL_RATING = 1500;
+  public static final int INITIAL_RATING = 1400;
 
   public static final int MAXIMAL_CONTESTANTS = 10_000;
 
