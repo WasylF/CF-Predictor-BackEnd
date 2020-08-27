@@ -11,6 +11,8 @@ public class Constants {
   public static final String PATH_TO_PROJECT
     = "/home/wsl_f/Projects/CF-rating-prediction/CF-PredictorBackEnd/";
 
+  public static final String RATING_STORAGE_PATH =
+          "/home/wsl_f/Projects/RatingStorage";
   /**
    * Delay before send request to Codeforces. Value in milliseconds.
    */
