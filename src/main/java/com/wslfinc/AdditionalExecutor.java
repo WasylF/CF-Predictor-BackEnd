@@ -25,10 +25,10 @@ public class AdditionalExecutor {
 
   public static void main(String[] args) throws Exception {
     //args = new String[]{"getPastRating", "767"};
-    args = new String[]{"getPastRating", "1500", "1395"};
-    //args = new String[]{"testRating", "908", "908"};//592
-    //args = new String[]{"matchesIdToNames", "false"};
-    args = new String[]{"calcGetNext", "1402", "1402"};
+    args = new String[]{"getPastRating", "1600", "1420"};
+    // args = new String[]{"testRating", "1425", "1426"};//592
+    // args = new String[]{"matchesIdToNames", "false"};
+    args = new String[]{"calcGetNext", "1421", "1421"};
 
     switch (args[0]) {
       case "getPastRating":
