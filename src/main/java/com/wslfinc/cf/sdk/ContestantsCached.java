@@ -23,8 +23,8 @@ public class ContestantsCached extends Cacheable<List<Contestant>, Integer> {
   private static final WebReader webReader = new WebReader();
 
   public ContestantsCached() {
-    // TTL 4 hours
-    super(10, 2, 4 * 60 * 60 * 1000);
+    // TTL 1 hour
+    super(10, 2, 1 * 60 * 60 * 1000);
   }
 
   public ArrayList<Contestant> LoadNotStoredRatings() {

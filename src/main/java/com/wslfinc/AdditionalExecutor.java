@@ -37,6 +37,7 @@ public class AdditionalExecutor {
 
     int incorrect = 0;
     int missed = 0;
+    int matches = 0;
     for (Contestant contestant : ratings_github) {
       if (ratings_new_map.containsKey(contestant.getHandle())) {
         if (ratings_new_map.get(contestant.getHandle()) != contestant.getPrevRating()) {
@@ -45,6 +46,8 @@ public class AdditionalExecutor {
                                ratings_new_map.get(contestant.getHandle()));
           }
           incorrect++;
+        } else {
+          matches++;
         }
       } else {
         if (missed < 10) {
@@ -53,6 +56,8 @@ public class AdditionalExecutor {
         missed++;
       }
     }
+
+    System.out.println("Matches: " + matches + "\tIncorrect: " + incorrect + "\tMissing: " + missed);
   }
 
   public static void main(String[] args) throws Exception {
