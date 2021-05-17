@@ -4,13 +4,7 @@ package com.wslfinc.cf.sdk;
  * @author Wsl_F
  */
 public class Constants {
-
-  /**
-   * Full path to the project folder. It's needed for tests.
-   */
-  public static final String PATH_TO_PROJECT
-    = "/home/wsl_f/Projects/CF-rating-prediction/CF-PredictorBackEnd/";
-
+  
   /**
    * Delay before send request to Codeforces. Value in milliseconds.
    */
@@ -31,9 +25,6 @@ public class Constants {
   public static final String API_PREFIX = "http://codeforces.com/api";
 
   public static final int NEGATIVE_INFINITY = -1_000_000_000;
-
-  public static final String PATH_TO_TEST_FILES
-    = "file://" + PATH_TO_PROJECT + "resources/for_tests/";
 
   public static final String PAST_RATING_URL_PREFIX
     = "https://codeforcescontests.github.io/RatingAfterRounds/contests/contest_";
