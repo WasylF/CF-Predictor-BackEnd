@@ -8,25 +8,25 @@ import org.json.JSONObject;
  */
 public class Member {
 
-  /**
-   * String. Codeforces user handle.
-   */
-  String handle;
+    /**
+     * String. Codeforces user handle.
+     */
+    String handle;
 
-  public Member(String handle) {
-    this.handle = handle;
-  }
+    public Member(String handle) {
+        this.handle = handle;
+    }
 
-  public Member(JSONObject member) {
-    setAll(member);
-  }
+    public Member(JSONObject member) {
+        setAll(member);
+    }
 
-  public final void setAll(JSONObject member) {
-    this.handle = JsonExtractor.getString(member, "handle");
-  }
+    public final void setAll(JSONObject member) {
+        this.handle = JsonExtractor.getString(member, "handle");
+    }
 
-  public String getHandle() {
-    return handle;
-  }
+    public String getHandle() {
+        return handle;
+    }
 
 }

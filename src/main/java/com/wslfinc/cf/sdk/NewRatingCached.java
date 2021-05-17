@@ -21,61 +21,61 @@ import java.util.concurrent.TimeUnit;
  */
 public class NewRatingCached {
 
-  final ExecutorService executor = Executors.newFixedThreadPool(2);
+    final ExecutorService executor = Executors.newFixedThreadPool(2);
 
-  private int timeToRefreshSeconds;
-  LoadingCache<Integer, List<ContestantResult>> cache;
+    private int timeToRefreshSeconds;
+    LoadingCache<Integer, List<ContestantResult>> cache;
 
-  public NewRatingCached(int timeToRefreshSeconds) {
-    this.timeToRefreshSeconds = timeToRefreshSeconds;
-    initCache();
-  }
-
-  private void initCache() {
-    cache = CacheBuilder.newBuilder()
-      .refreshAfterWrite(timeToRefreshSeconds, TimeUnit.SECONDS)
-      .build(
-        new CacheLoader<>() {
-          @Override
-          public ListenableFuture<List<ContestantResult>> reload(Integer contestId, List<ContestantResult> oldValue) {
-            ListenableFutureTask<List<ContestantResult>> task = ListenableFutureTask.create(() -> {
-              long before = System.currentTimeMillis();
-              System.out.println("Start updating rating: " + before);
-              RatingCalculatorTeam ratingCalculator = RatingCalculatorTeam.getRatingCalculator(contestId);
-              long before2 = System.currentTimeMillis();
-              List<ContestantResult> result = ratingCalculator.getNewRatings();
-              long after = System.currentTimeMillis();
-
-              System.out.printf("Rating for contest #%d calculated total in: %d millis, excluding cf request: %d%n",
-                contestId, after - before, after - before2);
-              return result;
-            });
-            executor.execute(task);
-            return task;
-          }
-
-          @Override
-          public List<ContestantResult> load(Integer contestId) {
-            return Collections.EMPTY_LIST;
-          }
-        });
-  }
-
-  public List<ContestantResult> getValue(int contestId) {
-    try {
-      return cache.get(contestId);
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-      System.err.println("Couldn't get next rating, because of " + e);
-      return Collections.emptyList();
+    public NewRatingCached(int timeToRefreshSeconds) {
+        this.timeToRefreshSeconds = timeToRefreshSeconds;
+        initCache();
     }
-  }
 
-  public Set<Integer> getCachedKeys() {
-    return cache.asMap().keySet();
-  }
+    private void initCache() {
+        cache = CacheBuilder.newBuilder()
+                .refreshAfterWrite(timeToRefreshSeconds, TimeUnit.SECONDS)
+                .build(
+                        new CacheLoader<>() {
+                            @Override
+                            public ListenableFuture<List<ContestantResult>> reload(Integer contestId, List<ContestantResult> oldValue) {
+                                ListenableFutureTask<List<ContestantResult>> task = ListenableFutureTask.create(() -> {
+                                    long before = System.currentTimeMillis();
+                                    System.out.println("Start updating rating: " + before);
+                                    RatingCalculatorTeam ratingCalculator = RatingCalculatorTeam.getRatingCalculator(contestId);
+                                    long before2 = System.currentTimeMillis();
+                                    List<ContestantResult> result = ratingCalculator.getNewRatings();
+                                    long after = System.currentTimeMillis();
 
-  public void remove(int contestId) {
-    cache.invalidate(contestId);
-  }
+                                    System.out.printf("Rating for contest #%d calculated total in: %d millis, excluding cf request: %d%n",
+                                            contestId, after - before, after - before2);
+                                    return result;
+                                });
+                                executor.execute(task);
+                                return task;
+                            }
+
+                            @Override
+                            public List<ContestantResult> load(Integer contestId) {
+                                return Collections.EMPTY_LIST;
+                            }
+                        });
+    }
+
+    public List<ContestantResult> getValue(int contestId) {
+        try {
+            return cache.get(contestId);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            System.err.println("Couldn't get next rating, because of " + e);
+            return Collections.emptyList();
+        }
+    }
+
+    public Set<Integer> getCachedKeys() {
+        return cache.asMap().keySet();
+    }
+
+    public void remove(int contestId) {
+        cache.invalidate(contestId);
+    }
 }

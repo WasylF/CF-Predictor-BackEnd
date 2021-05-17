@@ -12,25 +12,25 @@ import java.io.PrintWriter;
  */
 public class RemoveFromCacheServlet extends HttpServlet {
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-    String result;
-    try {
-      int contestId = Integer.valueOf(request.getParameter("contestId"));
-      CodeForcesSDK.removeFromCache(contestId);
-      result = "done";
-    } catch (Exception ex) {
-      result = "exception caused";
-    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        String result;
+        try {
+            int contestId = Integer.valueOf(request.getParameter("contestId"));
+            CodeForcesSDK.removeFromCache(contestId);
+            result = "done";
+        } catch (Exception ex) {
+            result = "exception caused";
+        }
 
-    try {
-      PrintWriter out = response.getWriter();
-      out.write(result);
-      out.flush();
-      response.setStatus(200);
-    } catch (Exception ex) {
-      System.err.println(ex.getMessage());
+        try {
+            PrintWriter out = response.getWriter();
+            out.write(result);
+            out.flush();
+            response.setStatus(200);
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
     }
-  }
 
 }

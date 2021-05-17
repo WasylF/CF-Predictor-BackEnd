@@ -12,25 +12,25 @@ import java.io.PrintWriter;
  */
 public class ChangeTimeToUpdateServlet extends HttpServlet {
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-    String result;
-    try {
-      int timeToUpdate = Integer.valueOf(request.getParameter("timeToUpdate"));
-      CodeForcesSDK.changeTimeToUodate(timeToUpdate);
-      result = "Updating time changed to " + timeToUpdate + " milliseconds";
-    } catch (Exception ex) {
-      result = "exception caused";
-    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        String result;
+        try {
+            int timeToUpdate = Integer.valueOf(request.getParameter("timeToUpdate"));
+            CodeForcesSDK.changeTimeToUodate(timeToUpdate);
+            result = "Updating time changed to " + timeToUpdate + " milliseconds";
+        } catch (Exception ex) {
+            result = "exception caused";
+        }
 
-    try {
-      PrintWriter out = response.getWriter();
-      out.write(result);
-      out.flush();
-      response.setStatus(200);
-    } catch (Exception ex) {
-      System.err.println(ex.getMessage());
+        try {
+            PrintWriter out = response.getWriter();
+            out.write(result);
+            out.flush();
+            response.setStatus(200);
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
     }
-  }
 
 }

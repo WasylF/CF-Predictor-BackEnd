@@ -7,18 +7,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class Expectant {
 
-  /**
-   * @param time_ms time in milliseconds
-   * @return successfulness
-   */
-  public static boolean delay(int time_ms) {
-    try {
-      TimeUnit.MILLISECONDS.sleep(time_ms);
-    } catch (Exception ex) {
-      return false;
-    }
+    /**
+     * @param time_ms time in milliseconds
+     * @return successfulness
+     */
+    public static boolean delay(int time_ms) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(time_ms);
+        } catch (Exception ex) {
+            return false;
+        }
 
-    return true;
-  }
+        return true;
+    }
 
 }
