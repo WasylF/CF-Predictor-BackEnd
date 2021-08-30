@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class RatingCalculatorTeam {
 
-    private int minDelta = 400;
-    private int maxDelta = 1100;
+    private int minDelta = 500;
+    private int maxDelta = 1200;
 
     public void setMinDelta(int minDelta) {
         this.minDelta = minDelta;
@@ -106,10 +106,10 @@ public class RatingCalculatorTeam {
         return average;
     }
 
-    private int getRatingToRank(Team contestant) {
+    private int getRatingForRank(Team contestant) {
         double averageRank = getAverageRank(contestant);
 
-        int left = contestant.getPrevRating() - 2 * minDelta;
+        int left = Math.max(1, contestant.getPrevRating() - 2 * minDelta);
         int right = contestant.getPrevRating() + 2 * maxDelta;
 
         while (right - left > 1) {
@@ -130,7 +130,7 @@ public class RatingCalculatorTeam {
 
         for (int i = 0; i < numberOfContestants; i++) {
             Team contestant = allContestants.get(i);
-            int expR = (int) getRatingToRank(contestant);
+            int expR = getRatingForRank(contestant);
             deltas.add((expR - contestant.getPrevRating()) / 2);
         }
 
