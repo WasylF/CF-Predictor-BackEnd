@@ -23,10 +23,10 @@ public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
         //args = new String[]{"getPastRating", "767"};
-        args = new String[]{"getPastRating", "1700", "1515", "/home/wasylf/Projects/RatingStorage/contests"};
+        args = new String[]{"getPastRating", "1700", "1540", "/home/wasylf/Projects/RatingStorage/contests"};
         // args = new String[]{"testRating", "908", "908"}; //592
         // args = new String[]{"matchesIdToNames", "false"};
-        args = new String[]{"calcGetNext", "1522", "1522", "/home/wasylf/Projects/RatingStorage/next_rating"};
+        // args = new String[]{"calcGetNext", "1522", "1522", "/home/wasylf/Projects/RatingStorage/next_rating"};
 
         switch (args[0]) {
             case "getPastRating":
