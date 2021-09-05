@@ -106,10 +106,6 @@ public class CodeForcesSDK {
      * @return List of Contestants that particapating in contest
      * #{@code contestId}. All fields of Contestant are filled.
      */
-    public static List<Contestant> getActiveContestants(int contestId) {
-        return ContestantProcessing.getActiveContestants(contestId);
-    }
-
     public static List<Team> getActiveTeams(int contestId) {
         return ContestantProcessing.getActiveTeams(contestId);
     }

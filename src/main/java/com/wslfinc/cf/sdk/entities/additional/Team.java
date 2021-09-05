@@ -11,9 +11,10 @@ public class Team implements Comparable<Team> {
     int rank;
     int prevRating;
     String name;
+    int contest_count;
 
-    public Team(ArrayList<Contestant> teamates, String name) {
-        this(teamates.toArray(new Contestant[teamates.size()]), name);
+    public Team(ArrayList<Contestant> teammates, String name) {
+        this(teammates.toArray(new Contestant[teammates.size()]), name);
     }
 
     public Team(Contestant[] contestants, String name) {
@@ -23,6 +24,9 @@ public class Team implements Comparable<Team> {
         rank = contestants[0].rank;
     }
 
+    public Team(Contestant[] contestants, String name, int contest_count) {
+
+    }
     private static double getEloWinProbability(double ra, double rb) {
         return 1.0 / (1 + Math.pow(10, (rb - ra) / 400.0));
     }
