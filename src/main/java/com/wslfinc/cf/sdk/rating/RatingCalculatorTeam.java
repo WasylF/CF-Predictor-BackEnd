@@ -7,7 +7,6 @@ import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import com.wslfinc.cf.sdk.entities.additional.Team;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -201,13 +200,8 @@ public class RatingCalculatorTeam {
       for (Contestant contestant : team.getContestants()) {
         int contestCount = contestant.getContestCount();
         if (contestCount < FAKE_DELTAS.length) {
-          int prevRating = contestCount == 0
-              ? 0
-              : (contestant.getPrevRating() - INITIAL_RATING + FAKE_DELTAS[contestCount - 1]);
-          int nextRating = results.get(i).getNextRating() +
-              (contestCount == FAKE_DELTAS.length - 1
-                  ? 0
-                  : FAKE_DELTAS[contestCount] - INITIAL_RATING);
+          int prevRating = FakeRatingConverter.getFakeRating(contestant.getPrevRating(), contestCount);
+          int nextRating = FakeRatingConverter.getFakeRating(results.get(i).getNextRating(), contestCount+1);
           results.get(i).getContestant().setPrevRating(prevRating);
           results.get(i).setNextRating(nextRating);
         }

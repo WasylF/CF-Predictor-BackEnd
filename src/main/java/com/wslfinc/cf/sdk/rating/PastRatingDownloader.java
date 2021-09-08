@@ -27,7 +27,7 @@ import org.json.JSONObject;
 public class PastRatingDownloader {
 
   // contest with id 1360 is the first that used "fake deltas" and true starting rating 1400.
-  private static boolean fake_deltas_enabled = false;
+  private static boolean fake_deltas_enabled = true;
 
   public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
     boolean result = getRatingBeforeContest(-1, maxId, filePrefix);

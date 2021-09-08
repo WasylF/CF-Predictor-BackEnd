@@ -8,6 +8,7 @@ import com.wslfinc.cf.sdk.entities.Member;
 import com.wslfinc.cf.sdk.entities.RanklistRow;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.cf.sdk.entities.additional.Team;
+import com.wslfinc.cf.sdk.rating.FakeRatingConverter;
 import com.wslfinc.cf.sdk.rating.RatingAndContestCount;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +70,9 @@ public class ContestantProcessing {
 
         RatingAndContestCount prevR = prevRating.get(handle);
         int rank = row.getRank();
-        if (ContestProcessing.isEducational(contestId) && prevR.rating >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
+        if (ContestProcessing.isEducational(contestId)
+            && FakeRatingConverter.getFakeRating(prevR.rating, prevR.contest_count)
+            >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
           teammates.clear();
           break;
         }
