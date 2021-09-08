@@ -1,6 +1,5 @@
 package com.wslfinc.cf.sdk.rating;
 
-import static com.wslfinc.cf.sdk.Constants.FAKE_DELTAS;
 import static com.wslfinc.cf.sdk.Constants.INITIAL_RATING;
 import static com.wslfinc.cf.sdk.Constants.JSON_RESULTS;
 import static com.wslfinc.cf.sdk.Constants.SUCCESSFUL_STATUS;
@@ -98,11 +97,10 @@ public class PastRatingDownloader {
       var handle = ratingChange.getHandle();
       int newRating = ratingChange.getNewRating();
       var currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
-      if (currentRating.contest_count >= 6 || !fake_deltas_enabled) {
+      if (!fake_deltas_enabled) {
         currentRating.rating = newRating;
       } else {
-        int true_deltas = newRating - FAKE_DELTAS[currentRating.contest_count];
-        currentRating.rating = INITIAL_RATING + true_deltas;
+        currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contest_count + 1);
       }
       currentRating.contest_count++;
       rating.put(handle, currentRating);

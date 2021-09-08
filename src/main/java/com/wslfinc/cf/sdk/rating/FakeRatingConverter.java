@@ -15,4 +15,16 @@ public class FakeRatingConverter {
 
     return trueRating - INITIAL_RATING + FAKE_DELTAS[contestCount - 1];
   }
+
+  public static int getTrueRating(int fakeRating, int contestCount) {
+    if (contestCount <= 0) {
+      return INITIAL_RATING;
+    }
+    if (contestCount >= FAKE_DELTAS.length) {
+      return fakeRating;
+    }
+
+    int true_deltas = fakeRating - FAKE_DELTAS[contestCount - 1];
+    return INITIAL_RATING + true_deltas;
+  }
 }
