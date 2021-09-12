@@ -1,7 +1,6 @@
 package com.wslfinc.cf.sdk.rating;
 
 import static com.wslfinc.cf.sdk.Constants.FAKE_DELTAS;
-import static com.wslfinc.cf.sdk.Constants.INITIAL_RATING;
 
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
@@ -201,7 +200,7 @@ public class RatingCalculatorTeam {
         int contestCount = contestant.getContestCount();
         if (contestCount < FAKE_DELTAS.length) {
           int prevRating = FakeRatingConverter.getFakeRating(contestant.getPrevRating(), contestCount);
-          int nextRating = FakeRatingConverter.getFakeRating(results.get(i).getNextRating(), contestCount+1);
+          int nextRating = FakeRatingConverter.getFakeRating(results.get(i).getNextRating(), contestCount + 1);
           results.get(i).getContestant().setPrevRating(prevRating);
           results.get(i).setNextRating(nextRating);
         }
