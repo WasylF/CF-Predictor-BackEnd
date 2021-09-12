@@ -12,8 +12,8 @@ public class Team implements Comparable<Team> {
   int prevRating;
   String name;
 
-  public Team(ArrayList<Contestant> teamates, String name) {
-    this(teamates.toArray(new Contestant[teamates.size()]), name);
+  public Team(ArrayList<Contestant> teammates, String name) {
+    this(teammates.toArray(new Contestant[teammates.size()]), name);
   }
 
   public Team(Contestant[] contestants, String name) {

@@ -40,21 +40,8 @@ public class ContestantProcessing {
    *
    * @param contestId Id of the contest. It is not the round number. It can be seen in contest URL. {@code 1 <=
    *                  contestId <= MAXIMAL_CONTEST_ID}
-   * @return List of Contestants that particapating in contest #{@code contestId}. All fields of Contestant are filled.
+   * @return List of Contestants that participating in contest #{@code contestId}. All fields of Contestant are filled.
    */
-  @Deprecated
-  static List<Contestant> getActiveContestants(int contestId) {
-    List<Contestant> registeredContestants = getAllContestants(contestId);
-    List<RanklistRow> rows = getRanklistRows(contestId);
-
-    Map<String, Integer> prevRating = new HashMap<>();
-    for (Contestant contestant : registeredContestants) {
-      prevRating.put(contestant.getHandle(), contestant.getPrevRating());
-    }
-
-    return getActiveContestants(registeredContestants, prevRating, rows);
-  }
-
   static ArrayList<Team> getActiveTeams(int contestId) {
     List<Contestant> registeredContestants = getAllContestants(contestId);
     List<RanklistRow> rows = getRanklistRows(contestId);
@@ -64,34 +51,13 @@ public class ContestantProcessing {
       prevRating.put(contestant.getHandle(), contestant.getPrevRating());
     }
 
-    return getActiveTeams(contestId, registeredContestants, prevRating, rows);
+    return getActiveTeams(contestId, prevRating, rows);
   }
 
-  @Deprecated
-  static List<Contestant> getActiveContestants(List<Contestant> oldCOntestants,
-      Map<String, Integer> prevRating, List<RanklistRow> rows) {
-    List<Contestant> active = new ArrayList<>();
-    for (RanklistRow row : rows) {
-      for (Member member : row.getParty().getMembers()) {
-        String handle = member.getHandle();
-        if (!prevRating.containsKey(handle)) {
-          prevRating.put(handle, INITIAL_RATING);
-        }
-
-        int prevR = prevRating.get(handle);
-        int rank = row.getRank();
-        active.add(new Contestant(handle, rank, prevR));
-      }
-    }
-
-    return active;
-  }
-
-  static ArrayList<Team> getActiveTeams(int contestId, List<Contestant> oldCOntestants,
-      Map<String, Integer> prevRating, List<RanklistRow> rows) {
+  static ArrayList<Team> getActiveTeams(int contestId, Map<String, Integer> prevRating, List<RanklistRow> rows) {
     ArrayList<Team> active = new ArrayList<>();
     for (RanklistRow row : rows) {
-      ArrayList<Contestant> temates = new ArrayList<>();
+      ArrayList<Contestant> teammates = new ArrayList<>();
       for (Member member : row.getParty().getMembers()) {
         String handle = member.getHandle();
         if (!prevRating.containsKey(handle)) {
@@ -101,16 +67,16 @@ public class ContestantProcessing {
         int prevR = prevRating.get(handle);
         int rank = row.getRank();
         if (ContestProcessing.isEducational(contestId) && prevR >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
-          temates.clear();
+          teammates.clear();
           break;
         }
-        temates.add(new Contestant(handle, rank, prevR));
+        teammates.add(new Contestant(handle, rank, prevR));
       }
 
-      if (temates.size() > 0) {
-        String name = temates.size() == 1 ? temates.get(0).getHandle()
+      if (teammates.size() > 0) {
+        String name = teammates.size() == 1 ? teammates.get(0).getHandle()
             : row.getParty().getTeamName();
-        active.add(new Team(temates, name));
+        active.add(new Team(teammates, name));
       }
     }
 

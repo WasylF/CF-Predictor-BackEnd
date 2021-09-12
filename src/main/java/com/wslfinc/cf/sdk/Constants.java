@@ -8,7 +8,7 @@ public class Constants {
   /**
    * Delay before send request to Codeforces. Value in milliseconds.
    */
-  public static final int API_DELAY_MS = 100;
+  public static final int API_DELAY_MS = 300;
 
   /**
    * Status of successful codeforces JSON-response.
@@ -34,8 +34,6 @@ public class Constants {
   public static final int INITIAL_RATING = 1400;
 
   public static final int MAXIMAL_CONTESTANTS = 10_000;
-
-  public static final int MAX_CONTEST_ID = 10_0000;
 
   public static final int MAX_RATING_EDUCATIONAL_PARTICIPANT = 2100;
 }
