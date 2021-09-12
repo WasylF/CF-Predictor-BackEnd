@@ -25,7 +25,7 @@ public class AdditionalExecutor {
     args = new String[]{"getPastRating", "1700", "1530", "/home/wasylf/Projects/RatingStorage/contests"};
     // args = new String[]{"testRating", "1569", "1569"}; //592
     // args = new String[]{"matchesIdToNames", "false"};
-    // args = new String[]{"calcGetNext", "1569", "1569", "/home/wasylf/Projects/RatingStorage/next_rating"};
+    args = new String[]{"calcGetNext", "1566", "1566", "/home/wasylf/Projects/RatingStorage/next_rating"};
 
     switch (args[0]) {
       case "getPastRating":
@@ -119,6 +119,7 @@ public class AdditionalExecutor {
 
     for (int id = minId; id <= maxId; id++) {
       try {
+        // String json = reader.read("https://cf-predictor-backend.herokuapp.com/GetNextRatingServlet?contestId=" + id);
         String json = reader.read("http://cf-predictor-compute.herokuapp.com/GetNextRatingServlet?contestId=" + id);
         String fileName = path + "/contest_" + id + ".html";
         writer.write(json, fileName);
