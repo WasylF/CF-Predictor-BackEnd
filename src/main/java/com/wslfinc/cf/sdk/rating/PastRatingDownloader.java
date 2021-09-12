@@ -26,7 +26,7 @@ import org.json.JSONObject;
 public class PastRatingDownloader {
 
   // contest with id 1360 is the first that used "fake deltas" and true starting rating 1400.
-  private static boolean fake_deltas_enabled = true;
+  private static boolean fakeDeltasEnabled = true;
 
   public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
     boolean result = getRatingBeforeContest(-1, maxId, filePrefix);
@@ -76,10 +76,10 @@ public class PastRatingDownloader {
   private static void addFromCF(int contestId, TreeMap<String, RatingAndContestCount> rating) {
     List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
 
-    if (!fake_deltas_enabled) {
+    if (!fakeDeltasEnabled) {
       for (RatingChange ratingChange : ratingChanges) {
         if (!rating.containsKey(ratingChange.getHandle()) && ratingChange.getOldRating() == 0) {
-          fake_deltas_enabled = true;
+          fakeDeltasEnabled = true;
           System.err.println("***********************************************");
           System.err.println("***********************************************");
           System.err.println("**                                           **");
@@ -97,12 +97,12 @@ public class PastRatingDownloader {
       var handle = ratingChange.getHandle();
       int newRating = ratingChange.getNewRating();
       var currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
-      if (!fake_deltas_enabled) {
+      if (!fakeDeltasEnabled) {
         currentRating.rating = newRating;
       } else {
-        currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contest_count + 1);
+        currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contestCount + 1);
       }
-      currentRating.contest_count++;
+      currentRating.contestCount++;
       rating.put(handle, currentRating);
     }
   }
@@ -114,15 +114,15 @@ public class PastRatingDownloader {
     }
   }
 
-  private static JSONObject toJSON(TreeMap<String, RatingAndContestCount> rating, boolean save_contest_count) {
+  private static JSONObject toJSON(TreeMap<String, RatingAndContestCount> rating, boolean saveContestCount) {
     List<JSONObject> list = new ArrayList<>(rating.size());
 
     for (String handle : rating.keySet()) {
       JSONObject contestant = new JSONObject();
       contestant.put("handle", handle);
       contestant.put("rating", rating.get(handle).rating);
-      if (save_contest_count) {
-        int contestCount = rating.get(handle).contest_count;
+      if (saveContestCount) {
+        int contestCount = rating.get(handle).contestCount;
         contestant.put("contest_count", contestCount);
       }
       list.add(contestant);
@@ -166,11 +166,11 @@ public class PastRatingDownloader {
     JSONArray ratingsArray = json.getJSONArray(JSON_RESULTS);
     for (Object userAndRating : ratingsArray) {
       JSONObject user = (JSONObject) userAndRating;
-      int contest_count = 0;
+      int contestCount = 0;
       if (user.has("contest_count")) {
-        contest_count = user.getInt("contest_count");
+        contestCount = user.getInt("contest_count");
       }
-      ratings.put(user.getString("handle"), new RatingAndContestCount(user.getInt("rating"), contest_count));
+      ratings.put(user.getString("handle"), new RatingAndContestCount(user.getInt("rating"), contestCount));
     }
 
     return ratings;

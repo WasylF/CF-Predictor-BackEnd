@@ -173,7 +173,7 @@ public class RatingCalculatorTeam {
         int nextRating = contestant.getPrevRating() + deltas.get(i);
         results.add(new ContestantResult(contestant, seed, nextRating));
       }
-      // Add a "fake" contestant with team name, so the extension can find rating change looking for team name.
+      // Add a "fake" contestant with team name, so the extension can find rating change looking for the team name.
       if (team.getContestants().length > 1) {
         Contestant teamAdd = new Contestant(team.getName(), team.getRank(),
             new RatingAndContestCount(0, FAKE_DELTAS.length + 1));

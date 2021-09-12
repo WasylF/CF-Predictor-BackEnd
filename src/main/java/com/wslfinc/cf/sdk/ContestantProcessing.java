@@ -71,7 +71,7 @@ public class ContestantProcessing {
         RatingAndContestCount prevR = prevRating.get(handle);
         int rank = row.getRank();
         if (ContestProcessing.isEducational(contestId)
-            && FakeRatingConverter.getFakeRating(prevR.rating, prevR.contest_count)
+            && FakeRatingConverter.getFakeRating(prevR.rating, prevR.contestCount)
             >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
           teammates.clear();
           break;

@@ -3,10 +3,10 @@ package com.wslfinc.cf.sdk.rating;
 public class RatingAndContestCount {
 
   public int rating;
-  public int contest_count;
+  public int contestCount;
 
-  public RatingAndContestCount(int rating, int contest_count) {
+  public RatingAndContestCount(int rating, int contestCount) {
     this.rating = rating;
-    this.contest_count = contest_count;
+    this.contestCount = contestCount;
   }
 }
