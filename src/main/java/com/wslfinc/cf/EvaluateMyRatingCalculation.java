@@ -1,6 +1,7 @@
 package com.wslfinc.cf;
 
 import com.wslfinc.cf.sdk.CodeForcesSDK;
+import com.wslfinc.cf.sdk.Constants;
 import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.ContestType;
 import com.wslfinc.cf.sdk.entities.RatingChange;
@@ -41,7 +42,9 @@ public class EvaluateMyRatingCalculation {
               if (predicted_rating_change.getNextRating() != real_rating_change.getNewRating()) {
                 RatingDiff rd = new RatingDiff(contestId, predicted_rating_change.getHandle(),
                     predicted_rating_change.getNextRating(), real_rating_change.getNewRating(),
-                    real_rating_change.getOldRating(), real_rating_change.getRank(), predicted_rating_change.getSeed());
+                    real_rating_change.getOldRating(), predicted_rating_change.getPrevRating(),
+                    real_rating_change.getRank(), predicted_rating_change.getSeed(),
+                    predicted_rating_change.getContestant().getContestCount());
 
                 difference.add(rd);
               }
@@ -51,9 +54,9 @@ public class EvaluateMyRatingCalculation {
 
           if (!found) {
             RatingDiff rd =
-                new RatingDiff(contestId, real_rating_change.getHandle(), 0, real_rating_change.getNewRating(),
-                    real_rating_change.getOldRating(), real_rating_change.getRank(), 0);
-
+                new RatingDiff(contestId, real_rating_change.getHandle(), -1000, real_rating_change.getNewRating(),
+                    real_rating_change.getOldRating(), Constants.INITIAL_RATING, real_rating_change.getRank(), -1000,
+                    0);
             difference.add(rd);
           }
         }
@@ -96,12 +99,9 @@ public class EvaluateMyRatingCalculation {
     Collections.reverse(difference);
 
     System.out.println("\n");
-    System.out.println("difference real previous predicted rank seed contestId handle");
-    for (int i = 0; i < difference.size(); i++) {
-      RatingDiff diff = difference.get(i);
-      System.out.println(
-          diff.diff + " " + diff.realRating + " " + diff.prevRating + " " + diff.predictedRating + " " + diff.rank +
-              " " + diff.seed + " " + diff.contestId + " " + diff.handle);
+    System.out.println(RatingDiff.describeFields());
+    for (var diff : difference) {
+      System.out.println(diff.serialize());
     }
 
     System.out.println("\n");
