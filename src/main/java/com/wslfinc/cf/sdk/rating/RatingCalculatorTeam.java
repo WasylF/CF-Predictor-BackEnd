@@ -1,5 +1,7 @@
 package com.wslfinc.cf.sdk.rating;
 
+import static com.wslfinc.cf.sdk.Constants.FAKE_DELTAS;
+
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
@@ -171,9 +173,29 @@ public class RatingCalculatorTeam {
         int nextRating = contestant.getPrevRating() + deltas.get(i);
         results.add(new ContestantResult(contestant, seed, nextRating));
       }
+      // Add a "fake" contestant with team name, so the extension can find rating change looking for the team name.
       if (team.getContestants().length > 1) {
-        Contestant teamAdd = new Contestant(team.getName(), team.getRank(), 0);
+        Contestant teamAdd = new Contestant(team.getName(), team.getRank(),
+            new RatingAndContestCount(0, FAKE_DELTAS.length + 1));
         results.add(new ContestantResult(teamAdd, seed, deltas.get(i)));
+      }
+    }
+
+    return results;
+  }
+
+  public List<ContestantResult> getNewRatingsWithFakeDeltas() {
+    var results = getNewRatings();
+    for (int i = 0; i < numberOfContestants; i++) {
+      Team team = allContestants.get(i);
+      for (Contestant contestant : team.getContestants()) {
+        int contestCount = contestant.getContestCount();
+        if (contestCount < FAKE_DELTAS.length) {
+          int prevRating = FakeRatingConverter.getFakeRating(contestant.getPrevRating(), contestCount);
+          int nextRating = FakeRatingConverter.getFakeRating(results.get(i).getNextRating(), contestCount + 1);
+          results.get(i).getContestant().setPrevRating(prevRating);
+          results.get(i).setNextRating(nextRating);
+        }
       }
     }
 

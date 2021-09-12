@@ -1,5 +1,6 @@
 package com.wslfinc.cf.sdk.rating;
 
+import static com.wslfinc.cf.sdk.Constants.INITIAL_RATING;
 import static com.wslfinc.cf.sdk.Constants.JSON_RESULTS;
 import static com.wslfinc.cf.sdk.Constants.SUCCESSFUL_STATUS;
 
@@ -12,9 +13,7 @@ import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,17 +25,20 @@ import org.json.JSONObject;
  */
 public class PastRatingDownloader {
 
+  // contest with id 1360 is the first that used "fake deltas" and true starting rating 1400.
+  private static boolean fakeDeltasEnabled = true;
+
   public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
     boolean result = getRatingBeforeContest(-1, maxId, filePrefix);
     return validate(maxId, filePrefix) && result;
   }
 
-  public static TreeMap<String, Integer> loadRatingFromId(int loadContestId, String filePrefix) {
+  public static TreeMap<String, RatingAndContestCount> loadRatingFromId(int loadContestId, String filePrefix) {
     if (loadContestId > 0) {
       try {
         String path = "file://" + getFileName("" + loadContestId, filePrefix);
         JSONObject json = JsonReader.read(path);
-        return new TreeMap<>(toMap(json));
+        return toMap(json);
       } catch (Exception ex) {
         System.err.println(ex.toString());
       }
@@ -47,7 +49,7 @@ public class PastRatingDownloader {
 
   public static boolean getRatingBeforeContest(int loadFromId, int maxId, String filePrefix) {
     List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
-    TreeMap<String, Integer> rating = loadRatingFromId(loadFromId, filePrefix);
+    TreeMap<String, RatingAndContestCount> rating = loadRatingFromId(loadFromId, filePrefix);
     boolean loaded = false;
 
     boolean result = true;
@@ -71,10 +73,37 @@ public class PastRatingDownloader {
     return result;
   }
 
-  private static void addFromCF(int contestId, TreeMap<String, Integer> rating) {
+  private static void addFromCF(int contestId, TreeMap<String, RatingAndContestCount> rating) {
     List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
+
+    if (!fakeDeltasEnabled) {
+      for (RatingChange ratingChange : ratingChanges) {
+        if (!rating.containsKey(ratingChange.getHandle()) && ratingChange.getOldRating() == 0) {
+          fakeDeltasEnabled = true;
+          System.err.println("***********************************************");
+          System.err.println("***********************************************");
+          System.err.println("**                                           **");
+          System.err.println("**                                           **");
+          System.err.println("**                  " + contestId + "                     **");
+          System.err.println("**                                           **");
+          System.err.println("**                                           **");
+          System.err.println("***********************************************");
+          System.err.println("***********************************************");
+          break;
+        }
+      }
+    }
     for (RatingChange ratingChange : ratingChanges) {
-      rating.put(ratingChange.getHandle(), ratingChange.getNewRating());
+      var handle = ratingChange.getHandle();
+      int newRating = ratingChange.getNewRating();
+      var currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
+      if (!fakeDeltasEnabled) {
+        currentRating.rating = newRating;
+      } else {
+        currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contestCount + 1);
+      }
+      currentRating.contestCount++;
+      rating.put(handle, currentRating);
     }
   }
 
@@ -85,13 +114,17 @@ public class PastRatingDownloader {
     }
   }
 
-  private static JSONObject toJSON(TreeMap<String, Integer> rating) {
+  private static JSONObject toJSON(TreeMap<String, RatingAndContestCount> rating, boolean saveContestCount) {
     List<JSONObject> list = new ArrayList<>(rating.size());
 
     for (String handle : rating.keySet()) {
       JSONObject contestant = new JSONObject();
       contestant.put("handle", handle);
-      contestant.put("rating", rating.get(handle));
+      contestant.put("rating", rating.get(handle).rating);
+      if (saveContestCount) {
+        int contestCount = rating.get(handle).contestCount;
+        contestant.put("contest_count", contestCount);
+      }
       list.add(contestant);
     }
 
@@ -106,10 +139,11 @@ public class PastRatingDownloader {
     return filePrefix + "/contest_" + contestId + ".html";
   }
 
-  private static boolean writeToFiles(String filePrefix, TreeMap<String, Integer> rating, String contestId) {
+  private static boolean writeToFiles(String filePrefix, TreeMap<String, RatingAndContestCount> rating,
+      String contestId) {
     boolean result = true;
     String fileName = getFileName(contestId, filePrefix);
-    JSONObject json = toJSON(rating);
+    JSONObject json = toJSON(rating, true);
 
     try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
       json.write(writer, 2, 0);
@@ -123,16 +157,20 @@ public class PastRatingDownloader {
     return result;
   }
 
-  private static Map<String, Integer> toMap(JSONObject json) {
+  private static TreeMap<String, RatingAndContestCount> toMap(JSONObject json) {
     if (!json.has("status") || !json.has(JSON_RESULTS)) {
-      return new HashMap<>();
+      return new TreeMap<>();
     }
 
-    Map<String, Integer> ratings = new HashMap<>();
+    TreeMap<String, RatingAndContestCount> ratings = new TreeMap<>();
     JSONArray ratingsArray = json.getJSONArray(JSON_RESULTS);
-    for (Object rating : ratingsArray) {
-      JSONObject r = (JSONObject) rating;
-      ratings.put(r.getString("handle"), r.getInt("rating"));
+    for (Object userAndRating : ratingsArray) {
+      JSONObject user = (JSONObject) userAndRating;
+      int contestCount = 0;
+      if (user.has("contest_count")) {
+        contestCount = user.getInt("contest_count");
+      }
+      ratings.put(user.getString("handle"), new RatingAndContestCount(user.getInt("rating"), contestCount));
     }
 
     return ratings;

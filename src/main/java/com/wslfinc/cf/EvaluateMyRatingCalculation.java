@@ -17,7 +17,7 @@ public class EvaluateMyRatingCalculation {
 
   static ArrayList<ContestantResult> GetPredicted(int contestId) {
     RatingCalculatorTeam ratingCalculator = RatingCalculatorTeam.getRatingCalculator(contestId);
-    return new ArrayList<>(ratingCalculator.getNewRatings());
+    return new ArrayList<>(ratingCalculator.getNewRatingsWithFakeDeltas());
   }
 
   // 592

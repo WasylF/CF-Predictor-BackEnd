@@ -8,6 +8,8 @@ import com.wslfinc.cf.sdk.entities.Member;
 import com.wslfinc.cf.sdk.entities.RanklistRow;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.cf.sdk.entities.additional.Team;
+import com.wslfinc.cf.sdk.rating.FakeRatingConverter;
+import com.wslfinc.cf.sdk.rating.RatingAndContestCount;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,27 +48,31 @@ public class ContestantProcessing {
     List<Contestant> registeredContestants = getAllContestants(contestId);
     List<RanklistRow> rows = getRanklistRows(contestId);
 
-    Map<String, Integer> prevRating = new HashMap<>();
+    Map<String, RatingAndContestCount> prevRating = new HashMap<>();
     for (Contestant contestant : registeredContestants) {
-      prevRating.put(contestant.getHandle(), contestant.getPrevRating());
+      prevRating.put(contestant.getHandle(),
+          new RatingAndContestCount(contestant.getPrevRating(), contestant.getContestCount()));
     }
 
     return getActiveTeams(contestId, prevRating, rows);
   }
 
-  static ArrayList<Team> getActiveTeams(int contestId, Map<String, Integer> prevRating, List<RanklistRow> rows) {
+  static ArrayList<Team> getActiveTeams(int contestId, Map<String, RatingAndContestCount> prevRating,
+      List<RanklistRow> rows) {
     ArrayList<Team> active = new ArrayList<>();
     for (RanklistRow row : rows) {
       ArrayList<Contestant> teammates = new ArrayList<>();
       for (Member member : row.getParty().getMembers()) {
         String handle = member.getHandle();
         if (!prevRating.containsKey(handle)) {
-          prevRating.put(handle, INITIAL_RATING);
+          prevRating.put(handle, new RatingAndContestCount(INITIAL_RATING, 0));
         }
 
-        int prevR = prevRating.get(handle);
+        RatingAndContestCount prevR = prevRating.get(handle);
         int rank = row.getRank();
-        if (ContestProcessing.isEducational(contestId) && prevR >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
+        if (ContestProcessing.isEducational(contestId)
+            && FakeRatingConverter.getFakeRating(prevR.rating, prevR.contestCount)
+            >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
           teammates.clear();
           break;
         }

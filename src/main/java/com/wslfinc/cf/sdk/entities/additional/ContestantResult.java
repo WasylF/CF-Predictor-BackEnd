@@ -46,6 +46,10 @@ public class ContestantResult {
     return nextRating;
   }
 
+  public void setNextRating(int nextRating) {
+    this.nextRating = nextRating;
+  }
+
   public String getHandle() {
     return contestant.handle;
   }
@@ -56,6 +60,10 @@ public class ContestantResult {
 
   public int getPrevRating() {
     return contestant.prevRating;
+  }
+
+  public Contestant getContestant() {
+    return contestant;
   }
 
   public JSONObject toJSON() {

@@ -36,4 +36,6 @@ public class Constants {
   public static final int MAXIMAL_CONTESTANTS = 10_000;
 
   public static final int MAX_RATING_EDUCATIONAL_PARTICIPANT = 2100;
+
+  public static final int[] FAKE_DELTAS = new int[]{500, 850, 1100, 1250, 1350, 1400};
 }

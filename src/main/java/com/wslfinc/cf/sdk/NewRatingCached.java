@@ -42,7 +42,7 @@ public class NewRatingCached {
                   System.out.println("Start updating rating: " + before);
                   RatingCalculatorTeam ratingCalculator = RatingCalculatorTeam.getRatingCalculator(contestId);
                   long before2 = System.currentTimeMillis();
-                  List<ContestantResult> result = ratingCalculator.getNewRatings();
+                  List<ContestantResult> result = ratingCalculator.getNewRatingsWithFakeDeltas();
                   long after = System.currentTimeMillis();
 
                   System.out.printf("Rating for contest #%d calculated total in: %d millis, excluding cf request: %d%n",
