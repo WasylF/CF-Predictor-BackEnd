@@ -38,19 +38,11 @@ public class RatingCalculatorTeam {
     return 1.0 / (1 + Math.pow(10, (rb - ra) / 400.0));
   }
 
-  public void setMinDelta(int minDelta) {
-    this.minDelta = minDelta;
-  }
-
-  public void setMaxDelta(int maxDelta) {
-    this.maxDelta = maxDelta;
-  }
-
   private void recalculateRanks() {
     Comparator<Team> rankComp = new Comparator<Team>() {
       @Override
-      public int compare(Team contestant1, Team contestan2) {
-        return Integer.compare(contestant1.getRank(), contestan2.getRank());
+      public int compare(Team contestant1, Team contestant2) {
+        return Integer.compare(contestant1.getRank(), contestant2.getRank());
       }
     };
 

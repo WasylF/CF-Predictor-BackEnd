@@ -27,14 +27,9 @@ public class Contestant implements Comparable<Contestant> {
    */
   int contestCount;
 
-  public Contestant(String handle, int rank,
-      RatingAndContestCount prevRating) {
+  public Contestant(String handle, int rank, RatingAndContestCount prevRating) {
     setAll(handle, rank, prevRating.rating, prevRating.contest_count);
   }
-
-//  public Contestant(String handle, int prevRating) {
-//    this(handle, DEFAULT_RANK, prevRating);
-//  }
 
   public Contestant(JSONObject contestant) {
     setAll(contestant);

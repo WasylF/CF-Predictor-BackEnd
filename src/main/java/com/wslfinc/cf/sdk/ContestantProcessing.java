@@ -42,7 +42,7 @@ public class ContestantProcessing {
    *
    * @param contestId Id of the contest. It is not the round number. It can be seen in contest URL. {@code 1 <=
    *                  contestId <= MAXIMAL_CONTEST_ID}
-   * @return List of Contestants that particapating in contest #{@code contestId}. All fields of Contestant are filled.
+   * @return List of Contestants that participating in contest #{@code contestId}. All fields of Contestant are filled.
    */
   static ArrayList<Team> getActiveTeams(int contestId) {
     List<Contestant> registeredContestants = getAllContestants(contestId);
