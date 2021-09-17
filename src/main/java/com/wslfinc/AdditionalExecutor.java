@@ -21,9 +21,8 @@ import org.json.JSONObject;
 public class AdditionalExecutor {
 
   public static void main(String[] args) throws Exception {
-    //args = new String[]{"getPastRating", "767"};
     args = new String[]{"getPastRating", "1700", "1530", "/home/wasylf/Projects/RatingStorage/contests"};
-    args = new String[]{"testRating", "1566", "1566"}; //592
+    // args = new String[]{"testRating", "1566", "1566"}; //592
     // args = new String[]{"matchesIdToNames", "false"};
     // args = new String[]{"calcGetNext", "1566", "1566", "/home/wasylf/Projects/RatingStorage/next_rating"};
 
@@ -121,8 +120,10 @@ public class AdditionalExecutor {
       try {
         // String json = reader.read("https://cf-predictor-backend.herokuapp.com/GetNextRatingServlet?contestId=" + id);
         String json = reader.read("http://cf-predictor-compute.herokuapp.com/GetNextRatingServlet?contestId=" + id);
+        JSONObject jsonObject = new JSONObject(json);
+        String prettyJson = jsonObject.toString(1);
         String fileName = path + "/contest_" + id + ".html";
-        writer.write(json, fileName);
+        writer.write(prettyJson, fileName);
         if (json.length() > 1000) {
           System.out.println("GetNextRating for contest " + id + " has been written successful");
         } else {
