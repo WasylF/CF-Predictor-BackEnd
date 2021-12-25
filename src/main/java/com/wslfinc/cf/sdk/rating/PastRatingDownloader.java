@@ -2,6 +2,7 @@ package com.wslfinc.cf.sdk.rating;
 
 import static com.wslfinc.cf.sdk.Constants.INITIAL_RATING;
 import static com.wslfinc.cf.sdk.Constants.JSON_RESULTS;
+import static com.wslfinc.cf.sdk.Constants.OLD_INITIAL_RATING;
 import static com.wslfinc.cf.sdk.Constants.SUCCESSFUL_STATUS;
 
 import com.wslfinc.cf.sdk.CodeForcesSDK;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 public class PastRatingDownloader {
 
   // contest with id 1360 is the first that used "fake deltas" and true starting rating 1400.
-  private static boolean fakeDeltasEnabled = true;
+  private static boolean fakeDeltasEnabled = false;
 
   public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
     boolean result = getRatingBeforeContest(-1, maxId, filePrefix);
@@ -76,30 +77,36 @@ public class PastRatingDownloader {
   private static void addFromCF(int contestId, TreeMap<String, RatingAndContestCount> rating) {
     List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
 
-    if (!fakeDeltasEnabled) {
-      for (RatingChange ratingChange : ratingChanges) {
-        if (!rating.containsKey(ratingChange.getHandle()) && ratingChange.getOldRating() == 0) {
-          fakeDeltasEnabled = true;
-          System.err.println("***********************************************");
-          System.err.println("***********************************************");
-          System.err.println("**                                           **");
-          System.err.println("**                                           **");
-          System.err.println("**                  " + contestId + "                     **");
-          System.err.println("**                                           **");
-          System.err.println("**                                           **");
-          System.err.println("***********************************************");
-          System.err.println("***********************************************");
-          break;
-        }
-      }
+//    if (!fakeDeltasEnabled) {
+//      for (RatingChange ratingChange : ratingChanges) {
+//        if (!rating.containsKey(ratingChange.getHandle()) && ratingChange.getOldRating() == 0) {
+//          fakeDeltasEnabled = true;
+//          System.err.println("***********************************************");
+//          System.err.println("***********************************************");
+//          System.err.println("**                                           **");
+//          System.err.println("**                                           **");
+//          System.err.println("**                  " + contestId + "                     **");
+//          System.err.println("**                                           **");
+//          System.err.println("**                                           **");
+//          System.err.println("***********************************************");
+//          System.err.println("***********************************************");
+//          break;
+//        }
+//      }
+//    }
+
+    if (contestId == 1360) {
+      fakeDeltasEnabled = true;
     }
     for (RatingChange ratingChange : ratingChanges) {
       var handle = ratingChange.getHandle();
       int newRating = ratingChange.getNewRating();
-      var currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
+      RatingAndContestCount currentRating;
       if (!fakeDeltasEnabled) {
+        currentRating = rating.getOrDefault(handle, new RatingAndContestCount(OLD_INITIAL_RATING, 10_000));
         currentRating.rating = newRating;
       } else {
+        currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
         currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contestCount + 1);
       }
       currentRating.contestCount++;

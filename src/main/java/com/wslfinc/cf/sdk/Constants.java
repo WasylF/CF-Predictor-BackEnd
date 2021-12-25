@@ -8,7 +8,7 @@ public class Constants {
   /**
    * Delay before send request to Codeforces. Value in milliseconds.
    */
-  public static final int API_DELAY_MS = 300;
+  public static final int API_DELAY_MS = 2050;
 
   /**
    * Status of successful codeforces JSON-response.
@@ -30,6 +30,8 @@ public class Constants {
       = "https://codeforcescontests.github.io/RatingAfterRounds/contests/contest_";
 
   public static final String PAST_RATING_URL_SUFFIX = ".html";
+
+  public static final int OLD_INITIAL_RATING = 1500;
 
   public static final int INITIAL_RATING = 1400;
 
