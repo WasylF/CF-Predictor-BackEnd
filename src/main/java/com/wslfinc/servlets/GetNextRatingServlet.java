@@ -26,8 +26,12 @@ public class GetNextRatingServlet extends HttpServlet {
     JSONObject json;
     try {
       int contestId = Integer.valueOf(request.getParameter("contestId"));
-      List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
-      json = ContestantResult.toJSON(nextRating);
+      if (contestId == 1641 || contestId == 1642) {
+        List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
+        json = ContestantResult.toJSON(nextRating);
+      } else {
+        throw new Exception("need more RAM!!!");
+      }
     } catch (Exception ex) {
       json = new JSONObject();
       json.put("status", "FAIL");
