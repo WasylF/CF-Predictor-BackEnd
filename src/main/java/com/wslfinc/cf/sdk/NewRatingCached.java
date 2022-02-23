@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class NewRatingCached {
 
-  final ExecutorService executor = Executors.newFixedThreadPool(2);
+  final ExecutorService executor = Executors.newFixedThreadPool(16);
   LoadingCache<Integer, List<ContestantResult>> cache;
   private int timeToRefreshSeconds;
 

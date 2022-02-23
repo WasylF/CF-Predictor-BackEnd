@@ -27,7 +27,7 @@ import org.json.JSONObject;
 public class PastRatingDownloader {
 
   // contest with id 1360 is the first that used "fake deltas" and true starting rating 1400.
-  private static boolean fakeDeltasEnabled = false;
+  private static boolean fakeDeltasEnabled = true;
 
   public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
     boolean result = getRatingBeforeContest(-1, maxId, filePrefix);
@@ -67,7 +67,7 @@ public class PastRatingDownloader {
         System.err.println("Couldn't write rating after contest " + contestId);
       }
       addFromCF(contestId, rating);
-      //addFromPredictor(contestId, rating);
+      // addFromPredictor(contestId, rating);
     }
 
     result &= writeToFiles(filePrefix, rating, "current");
@@ -114,10 +114,21 @@ public class PastRatingDownloader {
     }
   }
 
-  private static void addFromPredictor(int contestId, TreeMap<String, Integer> rating) {
+  private static void addFromPredictor(int contestId, TreeMap<String, RatingAndContestCount> rating) {
     List<ContestantResult> ratingChanges = CodeForcesSDK.getNewRatings(contestId);
     for (ContestantResult ratingChange : ratingChanges) {
-      rating.put(ratingChange.getHandle(), ratingChange.getNextRating());
+      var handle = ratingChange.getHandle();
+      int newRating = ratingChange.getNextRating();
+      RatingAndContestCount currentRating;
+      if (!fakeDeltasEnabled) {
+        currentRating = rating.getOrDefault(handle, new RatingAndContestCount(OLD_INITIAL_RATING, 10_000));
+        currentRating.rating = newRating;
+      } else {
+        currentRating = rating.getOrDefault(handle, new RatingAndContestCount(INITIAL_RATING, 0));
+        currentRating.rating = FakeRatingConverter.getTrueRating(newRating, currentRating.contestCount + 1);
+      }
+      currentRating.contestCount++;
+      rating.put(handle, currentRating);
     }
   }
 
