@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+web: java -Xms400M -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
