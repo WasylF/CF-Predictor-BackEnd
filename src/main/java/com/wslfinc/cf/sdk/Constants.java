@@ -8,7 +8,7 @@ public class Constants {
   /**
    * Delay before send request to Codeforces. Value in milliseconds.
    */
-  public static final int API_DELAY_MS = 2100;
+  public static final int API_DELAY_MS = 3100;
 
   /**
    * Status of successful codeforces JSON-response.
