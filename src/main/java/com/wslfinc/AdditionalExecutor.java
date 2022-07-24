@@ -21,10 +21,10 @@ import org.json.JSONObject;
 public class AdditionalExecutor {
 
   public static void main(String[] args) throws Exception {
-    args = new String[]{"getPastRating", "2000", "1685", "/home/wasylf/Projects/RatingStorage/contests"};
+    args = new String[]{"getPastRating", "2000", "1701", "/home/wasylf/Projects/RatingStorage/contests"};
     // args = new String[]{"testRating", "1566", "1566"}; //592
     // args = new String[]{"matchesIdToNames", "false"};
-    // args = new String[]{"calcGetNext", "1688", "1688", "/home/wasylf/Projects/RatingStorage/next_rating"};
+    args = new String[]{"calcGetNext", "1708", "1709", "/home/wasylf/Projects/RatingStorage/next_rating"};
 
     switch (args[0]) {
       case "getPastRating":
