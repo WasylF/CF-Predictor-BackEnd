@@ -26,8 +26,14 @@ public class GetNextRatingServlet extends HttpServlet {
     JSONObject json;
     try {
       int contestId = Integer.valueOf(request.getParameter("contestId"));
-      List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
-      json = ContestantResult.toJSON(nextRating);
+      if (contestId == 1710 || contestId == 1711) {
+        List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
+        json = ContestantResult.toJSON(nextRating);
+      } else {
+        System.err.println("Got request for contest " + contestId);
+        json = new JSONObject();
+        json.put("status", "FAIL");
+      }
     } catch (Exception ex) {
       json = new JSONObject();
       json.put("status", "FAIL");
