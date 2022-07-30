@@ -24,7 +24,7 @@ public class AdditionalExecutor {
     args = new String[]{"getPastRating", "2000", "1701", "/home/wasylf/Projects/RatingStorage/contests"};
     // args = new String[]{"testRating", "1566", "1566"}; //592
     // args = new String[]{"matchesIdToNames", "false"};
-    args = new String[]{"calcGetNext", "1708", "1709", "/home/wasylf/Projects/RatingStorage/next_rating"};
+    args = new String[]{"calcGetNext", "1711", "1711", "/home/wasylf/Projects/RatingStorage/next_rating"};
 
     switch (args[0]) {
       case "getPastRating":
@@ -119,8 +119,8 @@ public class AdditionalExecutor {
     for (int id = minId; id <= maxId; id++) {
       try {
         // String json = reader.read("https://cf-predictor-backend.herokuapp.com/GetNextRatingServlet?contestId=" + id);
-         String json = reader.read("http://cf-predictor-compute.herokuapp.com/GetNextRatingServlet?contestId=" + id);
-        // String json = reader.read("http://localhost:8080/GetNextRatingServlet?contestId=" + id);
+        // String json = reader.read("http://cf-predictor-compute.herokuapp.com/GetNextRatingServlet?contestId=" + id);
+         String json = reader.read("http://localhost:8080/GetNextRatingServlet?contestId=" + id);
         JSONObject jsonObject = new JSONObject(json);
         String prettyJson = jsonObject.toString(1);
         String fileName = path + "/contest_" + id + ".html";
