@@ -72,7 +72,7 @@ public class ContestantResult {
     json.put("rank", contestant.rank);
     json.put("oldRating", contestant.prevRating);
     json.put("newRating", nextRating);
-    json.put("seed", seed);
+    json.put("seed", (int) seed);
     return json;
   }
 
