@@ -22,7 +22,7 @@ public class Constants {
 
   public static final String JSON_STATUS = "status";
 
-  public static final String API_PREFIX = "http://codeforces.com/api";
+  public static final String API_PREFIX = "https://codeforces.com/api";
 
   public static final int NEGATIVE_INFINITY = -1_000_000_000;
 
